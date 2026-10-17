@@ -52,8 +52,9 @@ textarea{min-height:160px;resize:vertical;line-height:1.6}
 
 /* 录制 */
 #cam{background:#000}
-#video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#000}
-#video.mirror{transform:scaleX(-1)}
+#video{position:absolute;left:0;top:0;width:2px;height:2px;opacity:0;pointer-events:none}
+#view{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000;touch-action:none}
+#view.mirror{transform:scaleX(-1)}
 .prompt{position:absolute;left:0;right:0;top:0;height:var(--band,40%);
   padding-top:calc(var(--safe-t) + 8px);
   background:linear-gradient(to bottom,rgba(0,0,0,.78) 0%,rgba(0,0,0,.62) 78%,rgba(0,0,0,0) 100%);
@@ -64,24 +65,33 @@ textarea{min-height:160px;resize:vertical;line-height:1.6}
 .ptext{font-size:var(--fs,30px);line-height:1.55;font-weight:700;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.6);padding:12px 0 70vh}
 .ptext p{margin:0 0 .7em}
 .ptext .lab{font-size:13px;letter-spacing:.12em;color:var(--accent);font-weight:600;margin:1em 0 .3em;text-shadow:none}
-.ptext.flip{transform:scaleX(-1)}
 .guide{position:absolute;left:0;right:0;top:calc(var(--safe-t) + 6px + var(--fs,30px)*1.55*1.4);height:2px;background:var(--accent);opacity:.55;pointer-events:none}
 .bandgrip{position:absolute;left:50%;bottom:4px;width:54px;height:6px;margin-left:-27px;border-radius:3px;background:rgba(255,255,255,.45);touch-action:none}
 .hud{position:absolute;right:max(12px,var(--safe-r));top:calc(var(--band,40%) + 10px);display:flex;flex-direction:column;align-items:flex-end;gap:8px}
 .pill{background:rgba(0,0,0,.55);border-radius:999px;padding:6px 12px;font-size:13px;font-variant-numeric:tabular-nums;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 .pill.rec{background:var(--rec);font-weight:700}
 .count{position:absolute;inset:0;display:grid;place-items:center;font-size:140px;font-weight:900;color:#fff;text-shadow:0 4px 20px rgba(0,0,0,.6);pointer-events:none}
-.bar{position:absolute;left:0;right:0;bottom:0;padding:14px max(14px,var(--safe-r)) calc(var(--safe-b) + 14px) max(14px,var(--safe-l));
-  background:linear-gradient(to top,rgba(0,0,0,.7),rgba(0,0,0,0));display:grid;gap:12px}
+.bar{position:absolute;left:0;right:0;bottom:0;padding:10px max(14px,var(--safe-r)) calc(var(--safe-b) + 12px) max(14px,var(--safe-l));
+  background:linear-gradient(to top,rgba(0,0,0,.75),rgba(0,0,0,0));display:grid;gap:10px}
+.chips{display:flex;justify-content:center;gap:6px;flex-wrap:wrap}
+.chip{background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:6px 12px;font-size:13px;font-variant-numeric:tabular-nums;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.chip.on{background:var(--accent);border-color:var(--accent);color:#1a1200;font-weight:700}
+.chip.zoom{min-width:44px}
 .tools{display:flex;justify-content:space-between;gap:6px}
 .tool{flex:1;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:9px 0;font-size:14px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 .tool.on{border-color:var(--accent);color:var(--accent)}
 .main{display:flex;align-items:center;justify-content:space-between}
 .side{width:84px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:10px 0;font-size:14px}
-.recbtn{width:78px;height:78px;border-radius:50%;border:5px solid #fff;background:transparent;display:grid;place-items:center;padding:0}
-.recbtn i{display:block;width:58px;height:58px;border-radius:50%;background:var(--rec);transition:all .2s}
+.recbtn{width:76px;height:76px;border-radius:50%;border:5px solid #fff;background:transparent;display:grid;place-items:center;padding:0}
+.recbtn i{display:block;width:56px;height:56px;border-radius:50%;background:var(--rec);transition:all .2s}
 .recbtn.on i{width:30px;height:30px;border-radius:8px}
-.err{position:absolute;left:16px;right:16px;top:45%;background:rgba(0,0,0,.8);border-radius:14px;padding:16px;font-size:15px;line-height:1.7;text-align:center}
+.recbtn:disabled{opacity:.5}
+.err{position:absolute;left:16px;right:16px;top:45%;background:rgba(0,0,0,.85);border-radius:14px;padding:16px;font-size:15px;line-height:1.7;text-align:center}
+.sheet{position:absolute;left:max(12px,var(--safe-l));right:max(12px,var(--safe-r));bottom:calc(var(--safe-b) + 12px);background:rgba(21,24,29,.97);border:1px solid var(--line);border-radius:18px;padding:14px;display:grid;gap:12px}
+.sheet h3{margin:0;font-size:14px;color:var(--muted);font-weight:600}
+.sheet .opts{display:flex;flex-wrap:wrap;gap:8px}
+.sheet label{display:flex;align-items:center;gap:10px;font-size:15px}
+.sheet input[type=checkbox]{width:22px;height:22px;accent-color:var(--accent)}
 
 /* 回看 */
 #review{background:#000}
@@ -95,7 +105,7 @@ textarea{min-height:160px;resize:vertical;line-height:1.6}
 
 <!-- 稿子库 -->
 <section class="screen" id="lib">
-  <div class="top"><h1>提词相机</h1><span id="ver">离线可用</span></div>
+  <div class="top"><h1>提词相机</h1><span id="ver">离线可用 · v2</span></div>
 
   <div class="card">
     <h2>新稿子</h2>
@@ -124,6 +134,7 @@ textarea{min-height:160px;resize:vertical;line-height:1.6}
 <!-- 录制 -->
 <section class="screen" id="cam" hidden>
   <video id="video" playsinline autoplay muted></video>
+  <canvas id="view"></canvas>
   <div class="prompt" id="prompt">
     <div class="pscroll" id="pscroll"><div class="ptext" id="ptext"></div></div>
     <div class="guide" id="guide"></div>
@@ -135,7 +146,8 @@ textarea{min-height:160px;resize:vertical;line-height:1.6}
   </div>
   <div class="count" id="count" hidden></div>
   <div class="err" id="camErr" hidden></div>
-  <div class="bar">
+  <div class="bar" id="bar">
+    <div class="chips" id="zoomChips"></div>
     <div class="tools">
       <button class="tool" id="slower">慢</button>
       <button class="tool" id="spd">语速 4</button>
@@ -147,8 +159,18 @@ textarea{min-height:160px;resize:vertical;line-height:1.6}
     <div class="main">
       <button class="side" id="backBtn">返回</button>
       <button class="recbtn" id="recBtn" aria-label="开始录像"><i></i></button>
-      <button class="side" id="flipBtn">翻转镜头</button>
+      <button class="side" id="setBtn">9:16 · 设置</button>
     </div>
+  </div>
+  <div class="sheet" id="sheet" hidden>
+    <h3>画面比例</h3>
+    <div class="opts" id="ratioOpts"></div>
+    <h3>镜头</h3>
+    <div class="opts" id="lensOpts"></div>
+    <h3>画质</h3>
+    <div class="opts" id="qualOpts"></div>
+    <label><input type="checkbox" id="mirrorSave"> 前置镜头保存为镜像（和预览一样左右相反）</label>
+    <button class="btn primary" id="sheetDone">好了</button>
   </div>
 </section>
 
@@ -240,7 +262,6 @@ function applyView(){
   document.documentElement.style.setProperty("--fs",S.fs+"px");
   document.documentElement.style.setProperty("--band",S.band+"%");
   $("spd").textContent="语速 "+S.speed;
-  $("video").classList.toggle("mirror",S.facing==="user");
   $("scrollBtn").classList.toggle("on",scrollOn);
   $("scrollBtn").textContent=scrollOn?"暂停":"滚动";
 }
@@ -267,33 +288,127 @@ $("bigger").onclick=()=>{S.fs=Math.min(56,S.fs+2);saveS();applyView()};
 })();
 
 /* ---------- 相机 ---------- */
+const RATIOS=[["9:16",9/16],["3:4",3/4],["1:1",1],["4:3",4/3],["16:9",16/9]];
+const QUALS=[["高清 1080p",1080],["4K 2160p",2160],["省空间 720p",720]];
+const ZOOMS=[1,1.5,2,3];
+Object.assign(S,Object.assign({ratio:"9:16",zoom:1,qual:1080,deviceId:"",mirrorSave:false},S));
+let canvas=$("view"),ctx2d=canvas.getContext("2d",{alpha:false}),drawOn=false,camTrack=null,hwZoom=null,devices=[];
+const ratioVal=()=>(RATIOS.find(r=>r[0]===S.ratio)||RATIOS[0])[1];
+function isFront(){
+  if(!camTrack)return S.facing==="user";
+  const st=camTrack.getSettings?camTrack.getSettings():{};
+  if(st.facingMode)return st.facingMode==="user";
+  return /front|前置|facetime/i.test(camTrack.label||"")||S.facing==="user";
+}
+function fitCanvas(){
+  const v=$("video"),sw=v.videoWidth,sh=v.videoHeight;if(!sw||!sh)return;
+  const a=ratioVal();
+  // largest crop of the source with the chosen ratio
+  let cw=sw,ch=sw/a;if(ch>sh){ch=sh;cw=sh*a}
+  // output size: chosen quality on the short side, never upscale beyond the crop
+  const shortTarget=S.qual,shortCrop=Math.min(cw,ch);
+  const k=Math.min(1,shortTarget/shortCrop);
+  const W=Math.round(cw*k/2)*2,H=Math.round(ch*k/2)*2;
+  if(canvas.width!==W||canvas.height!==H){canvas.width=W;canvas.height=H}
+  $("res").textContent=`${S.ratio} · ${Math.min(W,H)}p`;
+}
+function draw(){
+  if(!drawOn)return;
+  const v=$("video"),sw=v.videoWidth,sh=v.videoHeight;
+  if(sw&&sh&&v.readyState>=2){
+    fitCanvas();
+    const a=ratioVal(),z=hwZoom?1:Math.max(1,S.zoom);
+    let cw=sw,ch=sw/a;if(ch>sh){ch=sh;cw=sh*a}
+    cw/=z;ch/=z;const sx=(sw-cw)/2,sy=(sh-ch)/2;
+    const m=S.mirrorSave&&isFront();
+    ctx2d.save();
+    if(m){ctx2d.translate(canvas.width,0);ctx2d.scale(-1,1)}
+    ctx2d.drawImage(v,sx,sy,cw,ch,0,0,canvas.width,canvas.height);
+    ctx2d.restore();
+  }
+  if(v.requestVideoFrameCallback)v.requestVideoFrameCallback(draw);else requestAnimationFrame(draw);
+}
+function applyMirror(){canvas.classList.toggle("mirror",isFront()&&!S.mirrorSave)}
+function renderZoom(){
+  const box=$("zoomChips");box.textContent="";
+  let list=ZOOMS;
+  if(hwZoom){list=ZOOMS.filter(z=>z>=hwZoom.min&&z<=hwZoom.max);if(hwZoom.min<1)list=[hwZoom.min,...list]}
+  list.forEach(z=>{const b=document.createElement("button");b.className="chip zoom"+(Math.abs(S.zoom-z)<0.01?" on":"");
+    b.textContent=(z<1?String(z).replace(/^0/,""):z)+"×";b.onclick=()=>setZoom(z);box.appendChild(b)});
+}
+async function setZoom(z){
+  S.zoom=z;saveS();
+  if(hwZoom&&camTrack){try{await camTrack.applyConstraints({advanced:[{zoom:Math.max(hwZoom.min,Math.min(hwZoom.max,z))}]})}catch(e){hwZoom=null}}
+  renderZoom();
+}
+// pinch to zoom on the preview
+(()=>{let d0=0,z0=1;
+  const dist=t=>Math.hypot(t[0].clientX-t[1].clientX,t[0].clientY-t[1].clientY);
+  canvas.addEventListener("touchstart",e=>{if(e.touches.length===2){d0=dist(e.touches);z0=S.zoom}},{passive:true});
+  canvas.addEventListener("touchmove",e=>{if(e.touches.length===2&&d0){const max=hwZoom?hwZoom.max:4,min=hwZoom?hwZoom.min:1;
+    S.zoom=Math.round(Math.max(min,Math.min(max,z0*dist(e.touches)/d0))*10)/10;
+    if(hwZoom&&camTrack)camTrack.applyConstraints({advanced:[{zoom:S.zoom}]}).catch(()=>{});
+    renderZoom();e.preventDefault()}},{passive:false});
+  canvas.addEventListener("touchend",()=>{if(d0){d0=0;saveS()}});
+})();
+async function listLenses(){
+  try{devices=(await navigator.mediaDevices.enumerateDevices()).filter(d=>d.kind==="videoinput")}catch(e){devices=[]}
+}
+function lensName(d){
+  const l=d.label||"";
+  if(/front|前置/i.test(l))return /true ?depth|原深感/i.test(l)?"前置（原深感）":"前置";
+  if(/ultra ?wide|超广角/i.test(l))return "后置超广角 0.5×";
+  if(/telephoto|长焦/i.test(l))return "后置长焦";
+  if(/triple|三摄/i.test(l))return "后置三摄（自动切换）";
+  if(/dual ?wide|双广角/i.test(l))return "后置双广角（自动切换）";
+  if(/dual|双摄/i.test(l))return "后置双摄（自动切换）";
+  if(/back|后置|wide|广角/i.test(l))return "后置广角 1×";
+  return l||"镜头";
+}
 async function startCamera(){
-  $("camErr").hidden=true;
+  $("camErr").hidden=true;drawOn=false;
   if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}
   if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){showErr("这个浏览器打不开相机。请用 iPhone 自带的 Safari 打开，并从“添加到主屏幕”的图标进入。");return}
-  try{
-    stream=await navigator.mediaDevices.getUserMedia({
-      video:{facingMode:S.facing,width:{ideal:1080},height:{ideal:1920},aspectRatio:{ideal:9/16},frameRate:{ideal:30}},
-      audio:{echoCancellation:false,noiseSuppression:true,autoGainControl:true}
-    });
-  }catch(e){
-    try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:S.facing},audio:true})}
-    catch(e2){showErr(e2&&e2.name==="NotAllowedError"?"没有相机或麦克风权限。去 设置 → Safari（或 提词相机）→ 相机、麦克风，选“允许”，再回来点“翻转镜头”重试。":"相机打不开："+(e2&&e2.message||e2));return}
+  const big=S.qual>=2160?{width:{ideal:3840},height:{ideal:3840}}:{width:{ideal:1920},height:{ideal:1920}};
+  const vbase=Object.assign({frameRate:{ideal:30}},big);
+  const video=S.deviceId?Object.assign({deviceId:{exact:S.deviceId}},vbase):Object.assign({facingMode:S.facing},vbase);
+  try{stream=await navigator.mediaDevices.getUserMedia({video,audio:{echoCancellation:false,noiseSuppression:true,autoGainControl:true}})}
+  catch(e){
+    try{stream=await navigator.mediaDevices.getUserMedia({video:S.deviceId?{deviceId:S.deviceId}:{facingMode:S.facing},audio:true})}
+    catch(e2){S.deviceId="";saveS();showErr(e2&&e2.name==="NotAllowedError"?"没有相机或麦克风权限。去 设置 → Safari（或 提词相机）→ 相机、麦克风，选“允许”，再回来点“设置”换一下镜头重试。":"相机打不开："+(e2&&e2.message||e2));return}
   }
+  camTrack=stream.getVideoTracks()[0];
+  hwZoom=null;
+  try{const c=camTrack.getCapabilities&&camTrack.getCapabilities();if(c&&c.zoom&&c.zoom.max>c.zoom.min)hwZoom={min:c.zoom.min,max:Math.min(c.zoom.max,10)}}catch(e){}
   const v=$("video");v.srcObject=stream;try{await v.play()}catch(e){}
-  const s=stream.getVideoTracks()[0].getSettings();
-  $("res").textContent=s.width&&s.height?`${Math.min(s.width,s.height)}p · ${Math.round(s.frameRate||30)}帧`:"";
+  await listLenses();
+  if(hwZoom)setZoom(Math.max(hwZoom.min,Math.min(hwZoom.max,S.zoom||1)));else{S.zoom=Math.max(1,S.zoom||1);renderZoom()}
+  applyMirror();drawOn=true;draw();
 }
 function showErr(msg){const e=$("camErr");e.textContent=msg;e.hidden=false}
 async function openCam(s){
   cur=s;fillPrompt(s.body);
-  $("lib").hidden=true;$("review").hidden=true;$("cam").hidden=false;
-  $("pscroll").scrollTop=0;acc=0;applyView();
+  $("lib").hidden=true;$("review").hidden=true;$("cam").hidden=false;$("sheet").hidden=true;
+  $("pscroll").scrollTop=0;acc=0;applyView();updSetBtn();
   await startCamera();
 }
-$("flipBtn").onclick=async()=>{if(rec&&rec.state==="recording")return;S.facing=S.facing==="user"?"environment":"user";saveS();applyView();await startCamera()};
+function updSetBtn(){$("setBtn").textContent=S.ratio+" · 设置"}
+function renderSheet(){
+  const mk=(box,items,isOn,onPick)=>{box.textContent="";items.forEach(([label,val])=>{const b=document.createElement("button");b.className="chip"+(isOn(val)?" on":"");b.textContent=label;b.onclick=()=>onPick(val);box.appendChild(b)})};
+  mk($("ratioOpts"),RATIOS.map(r=>[r[0]+(r[0]==="9:16"?" 竖屏":r[0]==="16:9"?" 横屏":""),r[0]]),v=>v===S.ratio,v=>{S.ratio=v;saveS();updSetBtn();renderSheet()});
+  const lens=devices.length?devices.map(d=>[lensName(d),d.deviceId]):[["前置","user"],["后置","environment"]];
+  const curId=camTrack&&camTrack.getSettings?camTrack.getSettings().deviceId:"";
+  mk($("lensOpts"),lens,v=>devices.length?v===curId:v===S.facing,async v=>{
+    if(devices.length){S.deviceId=v;const d=devices.find(x=>x.deviceId===v);S.facing=d&&/front|前置/i.test(d.label)?"user":"environment"}else{S.facing=v;S.deviceId=""}
+    saveS();await startCamera();renderSheet()});
+  mk($("qualOpts"),QUALS,v=>v===S.qual,async v=>{S.qual=v;saveS();renderSheet();await startCamera()});
+  $("mirrorSave").checked=!!S.mirrorSave;
+}
+$("mirrorSave").onchange=e=>{S.mirrorSave=e.target.checked;saveS();applyMirror()};
+$("setBtn").onclick=async()=>{if(rec&&rec.state==="recording")return;await listLenses();renderSheet();$("sheet").hidden=false;$("bar").hidden=true};
+$("sheetDone").onclick=()=>{$("sheet").hidden=true;$("bar").hidden=false};
 $("backBtn").onclick=()=>{if(rec&&rec.state==="recording")return;stopCamera();showLib()};
-function stopCamera(){setScroll(false);if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}$("video").srcObject=null}
+function stopCamera(){setScroll(false);drawOn=false;if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}$("video").srcObject=null;camTrack=null}
 function showLib(){$("cam").hidden=true;$("review").hidden=true;$("lib").hidden=false;renderList();renderTakes()}
 
 /* ---------- 录制 ---------- */
@@ -304,18 +419,26 @@ function pickMime(){
 }
 function fmtDur(s){s=Math.max(0,Math.round(s||0));return `${String(Math.floor(s/60)).padStart(2,"0")}:${String(s%60).padStart(2,"0")}`}
 async function countdown(n){const c=$("count");c.hidden=false;for(let i=n;i>0;i--){c.textContent=i;await new Promise(r=>setTimeout(r,800))}c.hidden=true}
+function recordStream(){
+  // record exactly what the preview canvas shows; fall back to the raw camera if the browser can't
+  if(canvas.captureStream){
+    try{const vt=canvas.captureStream(30).getVideoTracks()[0];if(vt)return new MediaStream([vt,...stream.getAudioTracks()])}catch(e){}
+  }
+  return stream;
+}
 $("recBtn").onclick=async()=>{
   if(rec&&rec.state==="recording"){rec.stop();return}
   if(!stream){await startCamera();if(!stream)return}
   const mime=pickMime();if(mime===null){showErr("这个浏览器不支持录像。请用 iOS 14.3 以上的 Safari。");return}
   $("recBtn").disabled=true;await countdown(3);$("recBtn").disabled=false;
-  chunks=[];
-  try{rec=new MediaRecorder(stream,Object.assign(mime?{mimeType:mime}:{}, {videoBitsPerSecond:12000000,audioBitsPerSecond:160000}))}
-  catch(e){try{rec=new MediaRecorder(stream)}catch(e2){showErr("录像启动失败："+e2.message);return}}
+  chunks=[];const rs=recordStream();
+  const px=canvas.width*canvas.height,vbps=px>=3840*2000?40000000:px>=1900*1000?14000000:7000000;
+  try{rec=new MediaRecorder(rs,Object.assign(mime?{mimeType:mime}:{}, {videoBitsPerSecond:vbps,audioBitsPerSecond:160000}))}
+  catch(e){try{rec=new MediaRecorder(rs)}catch(e2){showErr("录像启动失败："+e2.message);return}}
   rec.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};
-  rec.onstop=onStopped;
+  rec.onstop=()=>{rs!==stream&&rs.getVideoTracks().forEach(t=>t.stop());onStopped()};
   rec.start(1000);recStart=Date.now();
-  $("recBtn").classList.add("on");$("recBtn").setAttribute("aria-label","停止录像");
+  $("recBtn").classList.add("on");$("recBtn").setAttribute("aria-label","停止录像");$("setBtn").disabled=true;$("backBtn").disabled=true;
   $("timer").hidden=false;$("timer").classList.add("rec");$("timer").textContent="● 00:00";
   timerInt=setInterval(()=>{$("timer").textContent="● "+fmtDur((Date.now()-recStart)/1000)},500);
   try{if(navigator.wakeLock)wake=await navigator.wakeLock.request("screen")}catch(e){}
@@ -323,7 +446,7 @@ $("recBtn").onclick=async()=>{
 };
 async function onStopped(){
   clearInterval(timerInt);setScroll(false);
-  $("recBtn").classList.remove("on");$("recBtn").setAttribute("aria-label","开始录像");$("timer").hidden=true;
+  $("recBtn").classList.remove("on");$("recBtn").setAttribute("aria-label","开始录像");$("timer").hidden=true;$("setBtn").disabled=false;$("backBtn").disabled=false;
   try{if(wake){wake.release();wake=null}}catch(e){}
   const type=(rec&&rec.mimeType)||(chunks[0]&&chunks[0].type)||"video/mp4";
   const blob=new Blob(chunks,{type});chunks=[];
